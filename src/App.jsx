@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'export default App;';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calculator, Trophy, Check, X, ArrowLeft, BookOpen, Zap, LogIn, LogOut, MessageCircle, BarChart3, Settings, Users, Send, Swords, Clock, Volume2 } from 'lucide-react';
 import CanvasBoard from './components/CanvasBoard';
@@ -172,7 +172,7 @@ function App() {
   };
 
   const fetchAllProfiles = async () => {
-    const { data } = await supabase.from('profiles').select('*').order('full_name', { ascending: true });
+    const { data, error } = await supabase.from('profiles').select('*').order('full_name', { ascending: true });
     if (data) setAllProfiles(data);
   };
 
