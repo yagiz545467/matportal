@@ -427,7 +427,12 @@ function App() {
                   {questions.length > 0 && questions[currentIdx] ? (
                     <>
                       <h2 className="question-title" style={{ fontSize: '28px', marginBottom: '30px' }}>{questions[currentIdx].question}</h2>
-                      <div className="image-wrapper" style={{ marginBottom: '30px', maxWidth: '600px', margin: '0 auto 30px' }}><img src={questions[currentIdx].image} alt="Soru" style={{ width: '100%', borderRadius: '16px' }} /></div>
+                      <div className="image-wrapper" style={{ marginBottom: '30px', maxWidth: '600px', margin: '0 auto 30px', position: 'relative' }}>
+                        <img src={questions[currentIdx].image} alt="Soru" style={{ width: '100%', borderRadius: '16px' }} />
+                        {questions[currentIdx].labels?.map((l, i) => (
+                          <div key={i} style={{ position: 'absolute', top: l.top, left: l.left, backgroundColor: '#0071e3', color: 'white', padding: '4px 8px', borderRadius: '50%', fontSize: '12px', fontWeight: 700, transform: 'translate(-50%, -50%)', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', border: '2px solid white', minWidth: '24px', textAlign: 'center' }}>{l.text}</div>
+                        ))}
+                      </div>
                       <div className="option-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '16px', maxWidth: '800px', margin: '0 auto' }}>
                         {questions[currentIdx].options.map((opt, i) => (
                           <div key={i} className={`option-box ${answered ? (opt === questions[currentIdx].answer ? 'correct' : (selected === opt ? 'wrong' : '')) : ''}`} style={{ padding: '20px', fontSize: '18px' }} onClick={() => handleBattleAnswer(opt)}>
@@ -478,7 +483,12 @@ function App() {
                     <div className="card" style={{ margin: 0, padding: '30px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}><div style={{ color: '#86868b', fontSize: '12px', fontWeight: 600 }}>Soru {currentIdx + 1} / {questions.length}</div><div style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '100px', backgroundColor: questions[currentIdx].difficulty === 'Zor' ? '#ffebee' : '#e8f5e9', color: questions[currentIdx].difficulty === 'Zor' ? '#f44336' : '#4caf50' }}>{questions[currentIdx].difficulty}</div></div>
                       <h2 className="question-title" style={{ fontSize: '24px', marginBottom: '20px' }}>{questions[currentIdx].question}</h2>
-                      <div className="image-wrapper" style={{ marginBottom: '24px' }}><img src={questions[currentIdx].image} alt="Soru" style={{ width: '100%', height: 'auto', display: 'block' }} /></div>
+                      <div className="image-wrapper" style={{ marginBottom: '24px', position: 'relative' }}>
+                        <img src={questions[currentIdx].image} alt="Soru" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                        {questions[currentIdx].labels?.map((l, i) => (
+                          <div key={i} style={{ position: 'absolute', top: l.top, left: l.left, backgroundColor: '#0071e3', color: 'white', padding: '4px 8px', borderRadius: '50%', fontSize: '12px', fontWeight: 700, transform: 'translate(-50%, -50%)', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', border: '2px solid white', minWidth: '24px', textAlign: 'center' }}>{l.text}</div>
+                        ))}
+                      </div>
                       <div className="option-grid" style={{ gridTemplateColumns: '1fr', gap: '10px' }}>{questions[currentIdx].options.map((opt, i) => (<div key={i} className={`option-box ${answered ? (opt === questions[currentIdx].answer ? 'correct' : (selected === opt ? 'wrong' : '')) : ''}`} style={{ padding: '15px' }} onClick={() => handleAnswer(opt)}><span style={{ marginRight: '10px', opacity: 0.4, fontWeight: 700 }}>{String.fromCharCode(65 + i)}</span> {opt}</div>))}</div>
                       <AnimatePresence>{answered && (<motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} style={{ marginTop: '20px', padding: '15px', borderRadius: '12px', background: '#f5f5f7' }}><div style={{ fontWeight: 600, marginBottom: '5px', color: selected === questions[currentIdx].answer ? '#4caf50' : '#f44336' }}>{selected === questions[currentIdx].answer ? 'Doğru!' : 'Yanlış.'}</div><p style={{ color: '#86868b', fontSize: '13px' }}>{questions[currentIdx].explanation}</p><button className="btn-apple btn-primary" style={{ marginTop: '15px', width: '100%' }} onClick={nextQuestion}>{currentIdx < questions.length - 1 ? 'Sıradaki Soru' : 'Sonuçlar'}</button></motion.div>)}</AnimatePresence>
                     </div>
