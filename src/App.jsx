@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'export default App;';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calculator, Trophy, Check, X, ArrowLeft, BookOpen, Zap, LogIn, LogOut, MessageCircle, BarChart3, Settings, Users, Send, Swords, Clock, Volume2 } from 'lucide-react';
 import CanvasBoard from './components/CanvasBoard';
@@ -66,6 +66,10 @@ function App() {
   const [battleTimeLeft, setBattleTimeLeft] = useState(0);
   const dmEndRef = useRef(null);
 
+  // Constants
+  const topics = ['Hepsi', ...new Set(initialQuestions.map(q => q.title))];
+  const difficulties = ['Hepsi', 'Kolay', 'Orta', 'Zor'];
+
   // Sound ref
   const notificationAudio = useRef(new Audio(NOTIFICATION_SOUND));
 
@@ -82,7 +86,6 @@ function App() {
       const { data, error } = await supabase.from('profiles').upsert([{
         id: currentUser.id, email: currentUser.email, full_name: currentUser.user_metadata.full_name, avatar_url: currentUser.user_metadata.avatar_url
       }], { onConflict: 'id' }).select().single();
-      
       if (error) console.error("Profil Oluşturma Hatası:", error.message);
       if (data) setProfile(data);
     } else {
@@ -169,7 +172,7 @@ function App() {
   };
 
   const fetchAllProfiles = async () => {
-    const { data, error } = await supabase.from('profiles').select('*').order('full_name', { ascending: true });
+    const { data } = await supabase.from('profiles').select('*').order('full_name', { ascending: true });
     if (data) setAllProfiles(data);
   };
 
@@ -412,7 +415,6 @@ function App() {
           </motion.section>
         )}
 
-        {/* BATTLE ARENA */}
         {page === 'battle-arena' && activeBattle && (
            <motion.section key="battle-arena" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="quiz-section" style={{ paddingTop: '40px' }}>
              <div className="container" style={{ maxWidth: '1200px' }}>
@@ -440,7 +442,6 @@ function App() {
            </motion.section>
         )}
 
-        {/* BATTLE RESULT */}
         {page === 'battle-result' && activeBattle && (
            <motion.section key="battle-result" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="quiz-section" style={{ textAlign: 'center' }}>
               <div className="container" style={{ maxWidth: '600px' }}><div className="card" style={{ padding: '60px 40px' }}><Swords size={64} color="var(--accent)" style={{ margin: '0 auto 20px' }} /><h2 style={{ fontSize: '48px', marginBottom: '10px' }}>Kapışma Bitti!</h2><div style={{ display: 'flex', justifyContent: 'space-around', margin: '40px 0', alignItems: 'center' }}><div><h3 style={{ color: '#86868b' }}>{activeBattle.inviter_name}</h3><p style={{ fontSize: '48px', fontWeight: 800 }}>{activeBattle.inviter_score}</p></div><div style={{ fontSize: '24px', fontWeight: 800, color: '#e5e5ea' }}>VS</div><div><h3 style={{ color: '#86868b' }}>{activeBattle.invitee_name}</h3><p style={{ fontSize: '48px', fontWeight: 800 }}>{activeBattle.invitee_score}</p></div></div><button className="btn-apple btn-primary" style={{ width: '100%', padding: '16px' }} onClick={() => { setActiveBattle(null); navigate('chat'); }}>Sohbete Dön</button></div></div>
